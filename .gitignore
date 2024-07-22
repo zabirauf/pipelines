@@ -6,6 +6,7 @@ __pycache__
 
 pipelines/*
 !pipelines/.gitignore
+!pipelines/storm_wiki_pipeline.py
 .DS_Store
 
 .venv

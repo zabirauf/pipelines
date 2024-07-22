@@ -63,3 +63,6 @@ beautifulsoup4
 # Llama Index for RAG
 llama-index
 llama-index-llms-ollama
+
+# Storm wiki generator pipeline
+knowledge-storm
