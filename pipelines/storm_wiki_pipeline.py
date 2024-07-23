@@ -1,5 +1,4 @@
 from typing import List, Union, Generator, Iterator, Literal, Optional
-from schemas import OpenAIChatMessage
 import subprocess
 import tempfile
 import os
@@ -105,7 +104,7 @@ class Pipeline(FunctionCallingBlueprint):
                 "pipelines": ["*"],  # Connect to all pipelines
                 "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY", ""),
                 "YOU_API_KEY": os.getenv("YOU_API_KEY", ""),
-                "REGULAR_MODEL_NAME": os.getenv("REGULAR_MODEL_NAME", "gpt-4o-mini")
+                "REGULAR_MODEL_NAME": os.getenv("REGULAR_MODEL_NAME", "gpt-4o-mini"),
                 "SMART_MODEL_NAME": os.getenv("SMART_MODEL_NAME", "gpt-4o")
             },
         )
