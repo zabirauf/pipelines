@@ -135,20 +135,7 @@ class Pipeline:
                             citations_data = json.load(f)
                         
                         # Generate markdown for citations
-                        citations_markdown = "## Citations\n\n"
-                        for url, info in citations_data['url_to_info'].items():
-                            title = info.get('title', 'Untitled')
-                            description = info.get('description', 'No description available')
-                            snippets = info.get('snippets', [])
-                            citation_number = citations_data['url_to_unified_index'].get(url, 'N/A')
-                            
-                            citations_markdown += f"### [{citation_number}] [{title}]({url})\n\n"
-                            citations_markdown += f"{description}\n\n"
-                            if snippets:
-                                citations_markdown += "**Relevant Snippets:**\n\n"
-                                for snippet in snippets[:3]:  # Limit to 3 snippets
-                                    citations_markdown += f"- {snippet}\n\n"
-                            citations_markdown += "---\n\n"
+                        citations_markdown = self.generate_citations_markdown(citations_data)
                         
                         # Append citations to the polished article
                         polished_article += "\n\n" + citations_markdown
@@ -163,6 +150,29 @@ class Pipeline:
             else:
                 print("Error: Polished article not found at the specified path.")
                 return "Error: Polished article not found."
+
+    def generate_citations_markdown(self, citations_data: dict) -> str:
+        citations_markdown = "## Citations\n\n"
+        # Create a list of tuples containing citation number and URL
+        citations_list = [(int(citations_data['url_to_unified_index'].get(url, '0')), url) for url in citations_data['url_to_info'].keys()]
+        # Sort the list based on citation number
+        citations_list.sort(key=lambda x: x[0])
+        
+        for citation_number, url in citations_list:
+            info = citations_data['url_to_info'][url]
+            title = info.get('title', 'Untitled')
+            description = info.get('description', 'No description available')
+            snippets = info.get('snippets', [])
+            
+            citations_markdown += f"### [{citation_number}] [{title}]({url})\n\n"
+            citations_markdown += f"{description}\n\n"
+            if snippets:
+                citations_markdown += "**Relevant Snippets:**\n\n"
+                for snippet in snippets[:3]:  # Limit to 3 snippets
+                    citations_markdown += f"- {snippet}\n\n"
+            citations_markdown += "---\n\n"
+        
+        return citations_markdown
 
     async def on_startup(self):
         print(f"on_startup:{__name__}")
